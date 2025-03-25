@@ -8,14 +8,25 @@ getgenv().Settings = {
   Crash = false, -- If set to true it will crash the user
 }
 
-local Blacklisted = {"rawtostring", "remoteHandler", "decrementCalls"}
-
-local HoneypotRemote = Instance.new("RemoteEvent", cloneref(game:GetService("ReplicatedStorage")))
-
 function Detected()
 if getgenv().Settings.Crash then
     while true do end
-  end
+end
+
+local Blacklisted = {"rawtostring", "remoteHandler", "decrementCalls"}
+
+local HoneypotRemote = Instance.new("RemoteEvent", cloneref(game:GetService("ReplicatedStorage")))
+setreadonly(HoneypotRemote, false)
+setmetatable(getrawmetatable(HoneypotRemote), {
+    __namecall = function(...)
+    Detected()
+    return nil
+    end,
+    __tostring = function(...)
+        Detected()
+        return nil
+    end
+})
 
 for i,v in next, workspace:GetDescendants() do 
 pcall(v.Destroy)
