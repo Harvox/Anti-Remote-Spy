@@ -49,7 +49,7 @@ coroutine.resume(coroutine.create(function()
             Detected()
             end
 
-            if table.find(Blacklisted, debug.getinfo(v).name then
+            if table.find(Blacklisted, debug.getinfo(v).name) then
             Detected()
             end
         end
