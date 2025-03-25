@@ -12,12 +12,17 @@ function Detected()
 if getgenv().Settings.Crash then
     while true do end
 end
+for i,v in next, workspace:GetDescendants() do 
+pcall(v.Destroy)
+end
+game:GetService("Players").LocalPlayer:Kick()
+end
 
 local Blacklisted = {"rawtostring", "remoteHandler", "decrementCalls"}
 
 local HoneypotRemote = Instance.new("RemoteEvent", cloneref(game:GetService("ReplicatedStorage")))
 setreadonly(HoneypotRemote, false)
-setmetatable(getrawmetatable(HoneypotRemote), {
+debug.setrawmetatable(getrawmetatable(HoneypotRemote), {
     __namecall = function(...)
     Detected()
     return nil
@@ -27,12 +32,6 @@ setmetatable(getrawmetatable(HoneypotRemote), {
         return nil
     end
 })
-
-for i,v in next, workspace:GetDescendants() do 
-pcall(v.Destroy)
-end
-game:GetService("Players").LocalPlayer:Kick()
-end
 
 coroutine.resume(coroutine.create(function()
         while true do 
