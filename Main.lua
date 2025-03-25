@@ -8,6 +8,8 @@ getgenv().Settings = {
   Crash = false, -- If set to true it will crash the user
 }
 
+local Blacklisted = {"rawtostring", "remoteHandler", "decrementCalls"}
+
 local HoneypotRemote = Instance.new("RemoteEvent", cloneref(game:GetService("ReplicatedStorage")))
 
 function Detected()
@@ -32,8 +34,14 @@ coroutine.resume(coroutine.create(function()
       while true do 
         task.wait(getgenv().Settings.RefreshTimes)
               for _,v in next, getgc(false) do 
-        if typeof(v) == 'function' and islclosure(v) and (table.find(debug.getconstants(v), HoneypotRemote.Name) or table.find(debug.getupvalues(v), HoneypotRemote.Name)) then
+        if typeof(v) == 'function' and islclosure(v) then
+            if (table.find(debug.getconstants(v), HoneypotRemote.Name) or table.find(debug.getupvalues(v), HoneypotRemote.Name)) then
             Detected()
+            end
+
+            if table.find(Blacklisted, debug.getinfo(v).name then
+            Detected()
+            end
         end
         end
       end  
