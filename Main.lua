@@ -21,7 +21,7 @@ end
 local Blacklisted = {"rawtostring", "remoteHandler", "decrementCalls"}
 
 local HoneypotRemote = Instance.new("RemoteEvent", cloneref(game:GetService("ReplicatedStorage")))
-setreadonly(HoneypotRemote, false)
+setreadonly(getrawmetatable(HoneypotRemote), false)
 debug.setrawmetatable(getrawmetatable(HoneypotRemote), {
     __namecall = function(...)
     Detected()
